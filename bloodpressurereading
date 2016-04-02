@@ -1,0 +1,190 @@
+#include <iostream> //import libraries
+#include <string>
+#include <fstream>
+using namespace std;
+
+void evaluate_cholesterol(int, int, string&, string&); //function prototypes
+void evaluate_blood_pressure(int, int, string&, string&); 
+float evaluateratio(int, int);
+
+int main() {
+	//four integer values are HDL,LDL,systolic and diastolic BPs
+	//prompt user to read number of data from the file and use counter control loop to setup the process
+	//integer is number of times the patient has visited the doctor
+	//current new referral returning corresponds to C,N,F,R
+	ifstream myfile; //create file object
+	myfile.open("infile.txt"); //open file
+	string name, patienttype; //representation of patient data in the file
+	int visits, hdl, ldl, systolic, diastolic;
+	int upto; //how many patient's data user wants to read
+	cout << "Enter the number of patient records: "; cin >> upto;
+	for (int i = 0; i < upto; i++) { //loop for controlling the number of data to be read
+		myfile >> name >> patienttype >> visits;
+		cout << "\n\nCurrent Patient's Name- " << name << endl << endl;
+		int j = 0;
+		while(j < visits){ //loop for controlling data for specific patient
+		myfile >> hdl >> ldl >> systolic >> diastolic;
+			cout << "DATA SET " << j + 1; 
+			string hdlstring = "";
+			string ldlstring = "";
+			string systolicstring = "";  
+			string diastolicstring = "";
+			evaluate_cholesterol(hdl, ldl, hdlstring, hdlstring); //to evaluate ldl,hdl and their ratio
+			evaluate_blood_pressure(systolic, diastolic, systolicstring, diastolicstring); //to evaluate systolic and diastolic blood pressure
+			j++;
+			}
+		}
+	myfile.close(); //close the file
+	return 0;
+}
+
+void evaluate_cholesterol(int hdl, int ldl, string& hdlstring, string& ldlstring) {
+	//hdl,ldl is evaluated and report is printed accordingly 
+	cout << "\nCholestrol Profile" << endl;
+	cout << "  HDL: " << hdl << " LDL: " << ldl << endl;
+	cout << "  Ratio: " << ratio ;
+	{if (hdl < 40)
+		hdlstring = "  HDL is too low";
+		else if (hdl >= 40 && hdl < 60)
+			hdlstring = "  HDL is okay";
+			else
+				hdlstring = "  HDL is excellent"; }
+	cout << "\n" << hdlstring << endl;
+	{if (ldl < 100)
+		ldlstring = "  LDL is optimal";
+		else if (ldl >= 100 && ldl < 130)
+			ldlstring = "  LDL is near Optimal";
+			else if (ldl >= 130 && ldl < 160)
+				ldlstring = "  LDL is borderline high";
+				else if (ldl >= 160 && ldl < 190)
+					ldlstring = "  LDL is high";
+					else
+						ldlstring = "  LDL is very high"; }
+	cout << ldlstring << endl;
+	float ratio = evaluateratio(hdl, ldl);
+	{if (ratio > 0.3)
+		hldlratio = "  Ratio of HDL to LDL is good";
+			else
+				hldlratio = "  Ratio of HDL to LDL is not good"; }
+	cout << hldlratio << endl;
+}
+
+float evaluateratio(int hdl, int ldl) {
+	//to calculate ratio of hdl and ldl and send it to evaluate_cholestrol function
+	float ratio = float(hdl) / float(ldl);
+	return ratio;
+}
+
+void evaluate_blood_pressure(int systolic, int diastolic, string& systolicstring, string& diastolicstring) {
+	//to print blood pressure profile
+	cout << "Blood Pressure Profile" << endl;
+	cout << "  Systolic: " << systolic << " Diastolic: " << diastolic << endl;
+	{if (systolic < 120)
+		systolicstring = "  Systolic reading is Optimal";
+		else if (systolic < 130)
+			systolicstring = "  Systolic reading is Normal";
+			else if (systolic < 140)
+				systolicstring = "  Systolic reading is normal high";
+				else if (systolic < 160)
+					systolicstring = "  Systolic reading is stage 1 hypertension";
+					else if (systolic < 180)
+						systolicstring = "  Systolic reading is stage 2 hypertension";
+						else
+							systolicstring = "  Systolic reading is stage 3	hypertension"; }
+	cout << systolicstring << endl;
+	{if (diastolic < 80)
+		diastolicstring = "  Diastolic reading is Optimal";
+		else if (diastolic < 85)
+			diastolicstring = "  Diastolic reading is Normal";
+			else if (diastolic < 90)
+				diastolicstring = "  Diastolic reading is normal high";
+				else if (diastolic < 100)
+					diastolicstring = "  Diastolic reading is stage 1 hypertension";
+					else if (diastolic < 110)
+						diastolicstring = "  Diastolic reading is stage 2 hypertension";
+						else
+							diastolicstring = "  Diastolic reading is stage 3 hypertension"; }
+	cout << diastolicstring << endl;
+}
+
+/*
+Enter the number of patient records: 3
+
+
+Current Patient's Name- Jones
+
+DATA SET 1
+Cholestrol Profile
+HDL: 60 LDL: 124
+Ratio: 0.483871
+HDL is excellent
+LDL is near Optimal
+Ratio of HDL to LDL is good
+Blood Pressure Profile
+Systolic: 130 Diastolic: 84
+Systolic reading is normal high
+Diastolic reading is Normal
+DATA SET 2
+Cholestrol Profile
+HDL: 65 LDL: 121
+Ratio: 0.53719
+HDL is excellent
+LDL is near Optimal
+Ratio of HDL to LDL is good
+Blood Pressure Profile
+Systolic: 133 Diastolic: 80
+Systolic reading is normal high
+Diastolic reading is Normal
+DATA SET 3
+Cholestrol Profile
+HDL: 70 LDL: 120
+Ratio: 0.583333
+HDL is excellent
+LDL is near Optimal
+Ratio of HDL to LDL is good
+Blood Pressure Profile
+Systolic: 130 Diastolic: 81
+Systolic reading is normal high
+Diastolic reading is Normal
+
+
+Current Patient's Name- Smith
+
+DATA SET 1
+Cholestrol Profile
+HDL: 30 LDL: 195
+Ratio: 0.153846
+HDL is too low
+LDL is very high
+Ratio of HDL to LDL is not good
+Blood Pressure Profile
+Systolic: 120 Diastolic: 85
+Systolic reading is Normal
+Diastolic reading is normal high
+
+
+Current Patient's Name- Williams
+
+DATA SET 1
+Cholestrol Profile
+HDL: 45 LDL: 185
+Ratio: 0.243243
+HDL is okay
+LDL is high
+Ratio of HDL to LDL is not good
+Blood Pressure Profile
+Systolic: 190 Diastolic: 112
+Systolic reading is stage 3   hypertension
+Diastolic reading is stage 3 hypertension
+DATA SET 2
+Cholestrol Profile
+HDL: 50 LDL: 181
+Ratio: 0.276243
+HDL is okay
+LDL is high
+Ratio of HDL to LDL is not good
+Blood Pressure Profile
+Systolic: 193 Diastolic: 115
+Systolic reading is stage 3   hypertension
+Diastolic reading is stage 3 hypertension
+*/
