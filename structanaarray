@@ -1,0 +1,42 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+struct Studentaddress{ //struct to store student address
+    int housenum;
+    string streetname;
+    string city;
+    string state;
+    int zipcode;
+};
+
+struct Studentdata{ //struct to store student details
+    string fname;
+    string lname;
+    int id;
+    float gpa;
+    char classification;
+    float balance;
+    Studentaddress address;
+};
+
+void getandprint(ifstream&);
+
+int main(){
+    ifstream myfile;
+    myfile.open("infile.txt");
+    getandprint(myfile);
+}
+
+void getandprint(ifstream& myfile){
+    Studentdata holder[2]; //declare array to hold data of 2 students
+    for (int i = 0 ; i < 2; i++){
+        myfile >> holder[i].fname >> holder[i].lname >> holder[i].id >> holder[i].gpa>> holder[i].classification>> holder[i].balance>> holder[i].address.housenum;
+        myfile.ignore(100,'\n'); //ignore 100 characters until new line
+        getline(myfile,holder[i].address.streetname);
+        myfile >> holder[i].address.city >> holder[i].address.state >> holder[i].address.zipcode;
+        cout << holder[i].fname << "\n" <<holder[i].lname << "\n" << holder[i].id<< "\n"  << holder[i].gpa << "\n"<< holder[i].classification << "\n"<< holder[i].balance << "\n"<<holder[i].address.housenum<< holder[i].address.streetname<<"\n" << holder[i].address.city<< "\n"<<holder[i].address.state<<"\n"<<holder[i].address.zipcode<<endl<<endl;
+        }
+    myfile.close();
+}
