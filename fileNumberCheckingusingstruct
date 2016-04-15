@@ -1,0 +1,65 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+struct peoplediary {
+    string fname;
+    string lname;
+    string telnum;
+}; //structure to represent first and last name and telephone number of the user
+
+void lookup_name(ifstream&, string&); //function prototype
+
+int main() {
+    char choice; //variable declaration to later check for loop continuation or termination
+    string front, back; //to represent user input
+    do{ //to execute the function lookup_name atleast once and decide later continuation based upon user's need
+        ifstream myfile; //create file object
+        myfile.open("infile.txt"); //open the file named infile.txt
+        cout << "Enter first name "; //prompt input
+        cin >> front;
+        cout << "Enter last name ";
+        cin >> back;
+        string name = front + " " + back;
+        lookup_name(myfile, name);  //function call
+        cout << "Do you want to look up another name in the directory? (Y/N) " << endl;
+        cin >> choice;
+    }
+    while (choice == 'Y'); //to decide continuation or ending of program
+    //close the file
+    return 0;
+}
+
+void lookup_name(ifstream& myfile, string& name) {
+    peoplediary represent[10]; //array to represent data for the telephone directory
+    int space_index = name.find(" "); //to find the index of space to seperate first and last name of the input
+    string front = name.substr(0, space_index); //to retrieve first name of input by the user
+    string back = name.substr(space_index + 1); //to retrieve last name of input by the user
+    for (int i = 0; i < 10; i++) {
+        myfile >> represent[i].fname >> represent[i].lname >> represent[i].telnum; //get data from the struct
+        if (front == represent[i].fname && back == represent[i].lname) { //to check if input name matches the name in the file
+            cout << "The telephone number you requested is " << represent[i].telnum<<endl;
+        }
+        else
+            continue;
+    }
+}
+
+/*
+ Enter first name Shrijan
+ Enter last name Aryal
+ The telephone number you requested is (202)-830-6405
+ Do you want to look up another name in the directory? (Y/N)
+ Y
+ Enter first name Harry
+ Enter last name Keeling
+ The telephone number you requested is (202)806-4830
+ Do you want to look up another name in the directory? (Y/N)
+ Y
+ Enter first name Todd
+ Enter last name Shurn
+ The telephone number you requested is (410)560-8909
+ Do you want to look up another name in the directory? (Y/N)
+ N
+ */
