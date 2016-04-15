@@ -1,0 +1,225 @@
+#include <iostream> //import libraries
+#include <fstream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+//a program to compute number of student grades, average grade, grade above average, grade below average based on the input file
+//below is the data in the input file
+/*
+ Fall 2013 17
+ 54
+ 96
+ 68
+ 99
+ 35
+ 81
+ 93
+ 32
+ 12
+ 23
+ 45
+ 55
+ 66
+ 77
+ 88
+ 99
+ 100
+ Spring 2014 10
+ 99
+ 48
+ 22
+ 41
+ 66
+ 80
+ 91
+ 55
+ 83
+ 92
+ Fall 2014 12
+ 32
+ 12
+ 23
+ 45
+ 51
+ 62
+ 97
+ 38
+ 59
+ 80
+ 91
+ 98
+ Spring 2015 20
+ 93
+ 41
+ 60
+ 80
+ 90
+ 55
+ 88
+ 99
+ 32
+ 12
+ 23
+ 45
+ 55
+ 66
+ 77
+ 88
+ 99
+ 100
+ 99
+ 98
+ Fall 2015 15
+ 92
+ 45
+ 61
+ 86
+ 90
+ 55
+ 82
+ 92
+ 32
+ 12
+ 23
+ 45
+ 53
+ 61
+ 73
+ */
+
+struct examType{ //declaring structs to hold input file data
+    string semtype;
+    int year;
+    int numgrades;
+    float averagegrade;
+    int aboveaverage;
+    int belowaverage;
+    int student_grades[25];
+};
+
+
+void inputdata(ifstream&,examType[]); //to read file data
+void calculatestatistics(examType[]); //to call other functions
+void calculateaverage(examType[],int ); //to calculate average for each semester
+void calculateaboveaverage(examType[],int ); // to calculate number of students who scored above average
+void calculatebelowaverage(examType[],int ); // to calculate number of students who scored below average
+void printresults(examType[]); // to print output
+
+int main(){
+    ifstream myfile; //create file object
+    myfile.open ("infile.txt"); // opening the file
+    examType statistics[5]; //create statistics array to hold data for each semester
+    inputdata(myfile, statistics); //calling functions (see definitions above)
+    calculatestatistics(statistics);
+    printresults(statistics);
+
+}
+
+
+void inputdata(ifstream& myfile,examType examdetails[]){
+    //read data from the file using nested for loops. The inner loop extracts grade from the input file
+    for (int i = 0 ; i < 5; i++){
+        myfile >> examdetails[i].semtype >> examdetails[i].year>> examdetails[i].numgrades;
+        for (int j = 0 ; j < examdetails[i].numgrades; j++){
+            myfile >> examdetails[i].student_grades[j];
+        }
+    }
+}
+
+void calculatestatistics(examType statistics[]){
+    //this function calls other functions
+    for (int i = 0; i < 5; i++){
+        calculateaverage(statistics, i);
+        calculateaboveaverage(statistics , i);
+        calculatebelowaverage(statistics, i);
+    }
+}
+
+void calculateaverage(examType statistics[],int index){
+    //this functions uses index(to point at particular semester) and for loop to sum and find average for a particular semester
+    float sum = 0;
+    cout << fixed<< showpoint<< setprecision(2);
+    for(int i = 0; i< statistics[index].numgrades;i++){
+        
+        sum += statistics[index].student_grades[i];
+        
+    }
+    statistics[index].averagegrade = float (sum)/ float (statistics[index].numgrades);
+
+
+}
+
+void calculateaboveaverage(examType statistics[],int index){
+    //this function goes through average from struct and each grades to find grades above the average
+    int above = 0;
+    for (int i = 0 ; i < statistics[index].numgrades; i++){
+        if (statistics[index].student_grades[i] > statistics[index].averagegrade )
+            above ++;
+    }
+    statistics[index].aboveaverage = above;
+}
+
+void calculatebelowaverage(examType statistics[],int index){
+    //this function goes through average from struct and each grades to find grades below the average
+    int below = 0;
+    for (int i = 0 ; i < statistics[index].numgrades; i++){
+        if (statistics[index].student_grades[i] < statistics[index].averagegrade )
+            below ++;
+            }
+    statistics[index].belowaverage = below;
+}
+
+void printresults(examType statistics[]){
+    //this function prints report card
+    for (int i = 0 ; i < 5; i++){
+        cout << "Analysis of exams in "<<statistics[i].semtype<< endl<<endl;
+        cout << "The number of grades is "<< statistics[i].numgrades<<endl;
+        cout << "The average grade is "<< statistics[i].averagegrade<<endl;
+        cout << "The number of grades above average is "<< statistics[i].aboveaverage<<endl;
+        cout << "The number of grades below average is "<< statistics[i].belowaverage<<endl<<endl<<endl;
+        }
+}
+
+/*
+ Analysis of exams in Fall
+ 
+ The number of grades is 17
+ The average grade is 66.06
+ The number of grades above average is 9
+ The number of grades below average is 8
+ 
+ 
+ Analysis of exams in Spring
+ 
+ The number of grades is 10
+ The average grade is 67.70
+ The number of grades above average is 5
+ The number of grades below average is 5
+ 
+ 
+ Analysis of exams in Fall
+ 
+ The number of grades is 12
+ The average grade is 57.33
+ The number of grades above average is 6
+ The number of grades below average is 6
+ 
+ 
+ Analysis of exams in Spring
+ 
+ The number of grades is 20
+ The average grade is 70.00
+ The number of grades above average is 11
+ The number of grades below average is 9
+ 
+ 
+ Analysis of exams in Fall
+ 
+ The number of grades is 15
+ The average grade is 60.13
+ The number of grades above average is 8
+ The number of grades below average is 7
+ 
+
+ */
