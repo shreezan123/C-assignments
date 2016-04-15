@@ -1,0 +1,49 @@
+//
+//  main.cpp
+//  cs101
+//
+//  Created by Shrijan Aryal on 4/12/16.
+//  Copyright © 2016 Shrijan Aryal. All rights reserved.
+//
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct nodeType
+{
+    char info;
+    nodeType* next;
+};
+
+void displayname(nodeType*);
+
+int main() {
+    string name = "shrijan";
+    nodeType* firstLetterPtr; //Declare a nodeType pointer called "firstLetterPtr".
+    firstLetterPtr = new nodeType; //Declare a new nodeType and make firstLetter point to it.
+    firstLetterPtr->info = name[0]; // Store the first letter of your name in the info part of the new nodeType that you just created
+    firstLetterPtr->next = new nodeType; //The thing that firstLetterPtr points to’s next part points to a new nodeType
+    nodeType* current; //definition of current
+    int start = 1; // and an integer to iterate over the character array
+    //loop to go through the name until counter variable is less than length of your name
+    for (current = firstLetterPtr; start < name.length(); current->next = new nodeType)
+    {
+        current->next->info = name[start];
+        start++; //increase counter variable by one
+        current = current->next;
+    }
+    current->next = NULL;
+    displayname(firstLetterPtr); //function call
+    return 0;
+}
+//void function to print name
+void displayname(nodeType* pointat){
+    while (pointat) {
+        cout << pointat -> info; //print name characters at each loop
+        pointat = pointat -> next;
+    }
+    cout << endl;
+}
+
+//shrijan
